@@ -14,6 +14,7 @@ import connectDB from "./db/connect.js";
 
 import authRouter from "./routes/authRoutes.js";
 import jobRouter from "./routes/jobsRoutes.js";
+
 //MiddleWares
 import errorHandlerMiddleware from "./middleware/error-handler.js";
 import notFoundMiddleware from "./middleware/not-found.js";
@@ -25,26 +26,14 @@ if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }
 
-// import { dirname } from "path";
-// import { fileURLToPath } from "url";
-// const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// app.use(express.static(path.resolve(__dirname, "./client/build")));
 app.use(express.json());
 app.use(helmet());
 app.use(xss());
 app.use(mongoSanitize());
-// app.get("/", (req, res) => {
-//   res.send("welcome");
-// });
-// "start": "node server.js",
-// "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
-
-// "heroku-postbuild": "npm run install-client && npm run build-client",
-
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/jobs", authenticateUser, jobRouter);
-
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
@@ -54,12 +43,10 @@ app.get("*", (req, res) => {
 
 const port = process.env.PORT || 5000;
 
+// Enable in production
 // if (process.env.NODE_ENV === "production") {
 //   app.use(express.static("client/build"));
 // }
-// app.listen(port, () => {
-//   console.log(`server is listening at ${port}`);
-// });
 
 const start = async () => {
   try {
